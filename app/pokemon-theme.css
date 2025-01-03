@@ -1,0 +1,44 @@
+:root {
+  --pokemon-red: #FF0000;
+  --pokemon-blue: #3B4CCA;
+  --pokemon-yellow: #FFDE00;
+  --pokemon-gold: #B3A125;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.pokemon-card {
+  transition: all 0.3s ease;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.favorite-button {
+  transition: all 0.3s ease;
+}
+
+.favorite-button:hover {
+  transform: scale(1.05);
+}
+
+.pokemon-type {
+  transition: all 0.3s ease;
+}
+
+.pokemon-type:hover {
+  transform: scale(1.1);
+}
+

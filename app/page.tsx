@@ -1,101 +1,139 @@
-import Image from "next/image";
+"use client";
+import { useState, useEffect } from "react";
+
+import Link from "next/link";
+
+import SearchBar from "@/components/SearchBar";
+import PokemonCard from "@/components/PokemonCard";
+import ErrorMessage from "@/components/ErrorMessage";
+import TypeFilter from "@/components/TypeFilter";
+import Pagination from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
+
+import { PokemonDetails } from "./types";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [pokemon, setPokemon] = useState<PokemonDetails[]>([]);
+  const [filteredPokemon, setFilteredPokemon] = useState<PokemonDetails[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 12;
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    fetchPokemon(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (selectedType === "all") {
+      setFilteredPokemon(pokemon);
+    } else {
+      const filtered = pokemon.filter((p) =>
+        p?.types?.some((t) => t?.type?.name === selectedType)
+      );
+      setFilteredPokemon(filtered);
+    }
+  }, [selectedType, pokemon]);
+
+  const fetchPokemon = async (page: number) => {
+    try {
+      const offset = (page - 1) * itemsPerPage;
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=${offset}`
+      );
+      const data = await response.json();
+      const pokemonDetails = await Promise.all(
+        data.results.map((p: { url: string }) =>
+          fetch(p.url).then((res) => res.json())
+        )
+      );
+      setPokemon(pokemonDetails);
+      setTotalPages(Math.ceil(data.count / itemsPerPage));
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching Pokémon:", error);
+      setError("Failed to load Pokémon. Please try again later.");
+    }
+  };
+
+  const handleSearch = async (searchedPokemon: PokemonDetails) => {
+    setError(null);
+    setPokemon([searchedPokemon]);
+    setTotalPages(1);
+    setCurrentPage(1);
+  };
+
+  const handleTyping = async (query: string) => {
+    if (query.length < 2) {
+      fetchPokemon(1);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`
+      );
+      if (!response.ok) {
+        throw new Error("Pokemon not found");
+      }
+      const data = await response.json();
+      setPokemon([data]);
+      setTotalPages(1);
+      setCurrentPage(1);
+      setError(null);
+    } catch (error) {
+      console.error("Error searching Pokemon:", error);
+      setError("No Pokémon found. Try a different name or ID.");
+    }
+  };
+
+  const handleError = (errorMessage: string) => {
+    setError(errorMessage);
+    setPokemon([]);
+  };
+
+  const handleFilterChange = (type: string) => {
+    setSelectedType(type);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  return (
+    <div className="flex flex-col items-center space-y-8">
+      <div className="flex flex-col sm:flex-row w-full max-w-4xl gap-4 mb-8">
+        <div className="flex-grow">
+          <SearchBar
+            onSearch={handleSearch}
+            onError={handleError}
+            onTyping={handleTyping}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <TypeFilter onFilterChange={handleFilterChange} />
+          <Link href="/favorites">
+            <Button variant="outline" className="w-full sm:w-auto">
+              Go to Favorites
+            </Button>
+          </Link>
+        </div>
+      </div>
+      {error && <ErrorMessage message={error} />}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8 w-full max-w-7xl">
+        {filteredPokemon.map((p) => (
+          <Link href={`/pokemon/${p.name}`} key={p.id}>
+            <PokemonCard pokemon={p} />
+          </Link>
+        ))}
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }
