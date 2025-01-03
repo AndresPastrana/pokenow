@@ -1,0 +1,12 @@
+services:
+  app:
+    
+    container_name: pokenow_app
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+  
+    command: ["pnpm", "start"] 
