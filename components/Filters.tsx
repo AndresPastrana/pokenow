@@ -47,13 +47,13 @@ const Filter = () => {
   };
 
   return (
-    <div className="flex flex-row gap-3 max-w-">
-      <form className=" mt-2 flex flex-col space-y-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg  md:space-y-0 md:space-x-4">
+    <div className="flex flex-col md:flex-row gap-4 max-w-full">
+      <form className="w-full md:w-[40%] flex flex-col space-y-3 p-3 bg-white dark:bg-gray-800 rounded-md shadow-sm">
         {["base_experience", "height", "weight"].map((field) => (
           <div className="flex flex-col" key={field}>
             <Label
               htmlFor={field}
-              className="mb-2 text-gray-700 dark:text-gray-300 capitalize"
+              className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-300 capitalize"
             >
               {field.replace("_", " ")}
             </Label>
@@ -64,15 +64,23 @@ const Filter = () => {
               placeholder={`e.g. ${field === "base_experience" ? "100" : "10"}`}
               value={filters[field as keyof typeof filters]}
               onChange={handleChange}
+              className="p-1 border rounded border-gray-300 dark:border-gray-600 text-sm focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
             />
           </div>
         ))}
 
-        <Button type="button" variant="ghost" onClick={handleReset}>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={handleReset}
+          className="py-1 px-3 border rounded text-xs font-medium text-blue-600 border-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:border-blue-400 dark:hover:bg-gray-700 transition"
+        >
           Reset
         </Button>
       </form>
-      <Suggestions />
+      <div className="w-full md:w-[60%]">
+        <Suggestions />
+      </div>
     </div>
   );
 };

@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { PokemonDetails } from "../types";
 import { PokemonService } from "../services/pokemon.service";
 import { useSearchParams } from "next/navigation";
@@ -8,6 +14,7 @@ import {
   SearchParams,
   stringifySearchParams,
 } from "@/lib/url-state";
+import { env_data } from "@/lib/env";
 
 // Define the shape of the context
 interface PokemonContextType {
@@ -17,6 +24,7 @@ interface PokemonContextType {
   setFilteredPokemon: React.Dispatch<React.SetStateAction<PokemonDetails[]>>;
   fetchPokemon: (page: number) => void;
   error: string | null;
+  loading: boolean;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   selectedType: string;
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;
@@ -39,6 +47,7 @@ export const PokemonProvider: React.FC<PokemonProviderProps> = ({
   const [pokemon, setPokemon] = useState<PokemonDetails[]>([]);
   const [filteredPokemon, setFilteredPokemon] = useState<PokemonDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // Add loading state
   const [selectedType, setSelectedType] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -46,35 +55,39 @@ export const PokemonProvider: React.FC<PokemonProviderProps> = ({
     parseSearchParams(searchParamsToObject(searchParams))
   );
 
-  const itemsPerPage = 12;
+  const itemsPerPage = env_data.POKEMONS_BY_PAGE;
 
   // Fetch Pokémon data
-  const fetchPokemon = async (page: number) => {
-    try {
-      const resp = await PokemonService.fetchPaginatedPokemon(
-        page,
-        itemsPerPage
-      );
-      setPokemon(resp.pokemonDetails);
-      setTotalPages(Math.ceil(resp.total / itemsPerPage));
-      setError(null);
-    } catch (error) {
-      console.error("Error fetching Pokémon:", error);
-      setError("Failed to load Pokémon. Please try again later.");
-    }
-  };
+  const fetchPokemon = useCallback(
+    async (page: number) => {
+      setLoading(true); // Set loading to true when starting to fetch
+      try {
+        const resp = await PokemonService.fetchPaginatedPokemon(
+          page,
+          itemsPerPage
+        );
+        setPokemon(resp.pokemonDetails);
+        setTotalPages(Math.ceil(resp.total / itemsPerPage));
+        setError(null);
+      } catch (error) {
+        console.error("Error fetching Pokémon:", error);
+        setError("Failed to load Pokémon. Please try again later.");
+      } finally {
+        setLoading(false); // Set loading to false after the fetch completes (success or failure)
+      }
+    },
+    [itemsPerPage]
+  );
 
   useEffect(() => {
     fetchPokemon(currentPage);
-  }, [currentPage]);
+  }, [fetchPokemon, currentPage]);
 
   // Filter Pokémon based on selected type
   useEffect(() => {
-    // TODO: Mov this filter out of the client
     const filterPokemon = () => {
       setFilteredPokemon(pokemon);
 
-      // Build the filter object based in the url string
       const filter_object = string_params.split("&").reduce((acc, current) => {
         const [search_key, search_value] = current.split("=");
         return { ...acc, [search_key]: search_value };
@@ -82,21 +95,18 @@ export const PokemonProvider: React.FC<PokemonProviderProps> = ({
 
       let filtered = pokemon;
 
-      // Filter by base experience
       if (filter_object.base_experience) {
         filtered = filtered.filter(
           (p) => p.base_experience >= Number(filter_object.base_experience)
         );
       }
 
-      // Filter by height
       if (filter_object.height) {
         filtered = filtered.filter(
           (p) => p.height >= Number(filter_object.height) * 10
         );
       }
 
-      // Filter by weight
       if (filter_object.weight) {
         filtered = filtered.filter(
           (p) => p.weight >= Number(filter_object.weight) * 10
@@ -118,6 +128,7 @@ export const PokemonProvider: React.FC<PokemonProviderProps> = ({
         setFilteredPokemon,
         fetchPokemon,
         error,
+        loading, // Provide the loading state to the context
         setError,
         selectedType,
         setSelectedType,
@@ -131,6 +142,7 @@ export const PokemonProvider: React.FC<PokemonProviderProps> = ({
     </PokemonContext.Provider>
   );
 };
+
 export const usePokemon = () => {
   const context = useContext(PokemonContext);
   if (context === undefined) {

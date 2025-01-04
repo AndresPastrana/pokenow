@@ -31,10 +31,10 @@ export const Suggestions = () => {
                   href={pokemon_details_url(p.name)}
                   key={p.name}
                   className={`${buttonVariants({
-                    variant: "outline",
-                  })} py-2 px-4 text-sm text-gray-700 hover:bg-pokemon-blue hover:text-white focus:ring-2 focus:ring-pokemon-blue rounded-lg transition-all duration-200`}
+                    variant: "ghost",
+                  })} text-left py-2 px-4 text-sm text-gray-700 hover:bg-pokemon-blue hover:text-blue-600 focus:ring-2 focus:ring-pokemon-blue rounded-lg transition-all duration-200 flex`}
                 >
-                  {p.name}
+                  <span>{p.name}</span>
                 </Link>
               ))
           ) : (

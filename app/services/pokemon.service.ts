@@ -1,11 +1,20 @@
+import { env_data } from "@/lib/env";
 import { ApiResponse, PokemonDetails } from "../types";
 
 export class PokemonService {
   //TODO: Validate the load env with a zod schema
-  private static baseUrl: string = process.env
-    .NEXT_PUBLIC_POKE_API_URL as string;
+  private static baseUrl: string = env_data.NEXT_PUBLIC_POKE_API_URL;
 
-  static async fetchPaginatedPokemon(page: number, itemsPerPage: number) {
+  static async fetchPaginatedPokemon(
+    page: number,
+    itemsPerPage: number = env_data.POKEMONS_BY_PAGE
+  ) {
+    function delay(ms: number) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    await delay(500);
+
     try {
       const offset = (page - 1) * itemsPerPage;
 

@@ -30,7 +30,7 @@ export default function SearchBar() {
 
   return (
     <div className="w-full">
-      <div className="relative">
+      <div className="relative mb-4">
         <Input
           defaultValue={searchParams.get("search") || ""}
           type="text"

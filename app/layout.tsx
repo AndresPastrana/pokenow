@@ -1,9 +1,15 @@
 import "./globals.css";
 import "./pokemon-theme.css";
-import { Inter } from "next/font/google";
+
 import { FavoritesProvider } from "./contexts/FavoritesContext";
 
-const inter = Inter({ subsets: ["latin"] });
+import { Oxanium } from "next/font/google";
+
+const oxanium = Oxanium({
+  subsets: ["latin"], // Use the Latin subset for standard characters
+  weight: "400", // Default weight for a clean, thin look
+  display: "swap", // Optimize loading
+});
 
 export const metadata = {
   title: "PokeNow",
@@ -18,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen p-4 sm:p-6 md:p-8`}
+        className={`${oxanium.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen p-4 sm:p-6 md:p-8`}
       >
         <FavoritesProvider>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
