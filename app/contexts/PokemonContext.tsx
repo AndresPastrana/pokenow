@@ -32,6 +32,7 @@ interface PokemonProviderProps {
   children: React.ReactNode;
 }
 
+// TODO: Integrate this with the useFetch function
 export const PokemonProvider: React.FC<PokemonProviderProps> = ({
   children,
 }) => {

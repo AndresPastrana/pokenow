@@ -6,7 +6,7 @@ import { z } from "zod";
  * The default number of Pokémon displayed per page when no specific value is provided.
  */
 const fallback_pokemons_per_page = 10;
-
+const api_url_fallback = "https://pokeapi.co/api/v2/";
 /**
  * Schema for validating environment variables using Zod.
  * - `NEXT_PUBLIC_POKE_API_URL`: Ensures it's a valid URL.
@@ -23,11 +23,14 @@ const envSchema = z.object({
  * - `POKEMONS_BY_PAGE`: Number of Pokémon displayed per page.
  */
 const envVars = {
-  NEXT_PUBLIC_POKE_API_URL: process.env.NEXT_PUBLIC_POKE_API_URL,
-  POKEMONS_BY_PAGE: +(
-    process.env.NEXT_PUBLIC_POKEMONS_BY_PAGE ?? fallback_pokemons_per_page
-  ),
+  NEXT_PUBLIC_POKE_API_URL:
+    process.env.NEXT_PUBLIC_POKE_API_URL || api_url_fallback,
+  POKEMONS_BY_PAGE: Number(process.env.NEXT_PUBLIC_POKEMONS_BY_PAGE),
 };
+
+if (isNaN(envVars.POKEMONS_BY_PAGE)) {
+  envVars.POKEMONS_BY_PAGE = fallback_pokemons_per_page;
+}
 
 const parsedEnv = envSchema.safeParse(envVars);
 
