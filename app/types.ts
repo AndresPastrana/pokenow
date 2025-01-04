@@ -6,17 +6,17 @@
 
 export interface PokemonDetails {
   abilities?: Ability[];
-  base_experience?: number;
+  base_experience: number;
   cries?: Cries;
   forms?: Species[];
   game_indices?: GameIndex[];
-  height?: number;
+  height: number;
   held_items?: HeldItem[];
   id?: number;
   is_default?: boolean;
   location_area_encounters?: string;
   moves?: Move[];
-  name?: string;
+  name: string;
   order?: number;
   past_abilities?: unknown[];
   past_types?: unknown[];
@@ -24,7 +24,7 @@ export interface PokemonDetails {
   sprites?: Sprites;
   stats?: Stat[];
   types?: Type[];
-  weight?: number;
+  weight: number;
 }
 
 interface Ability {
@@ -191,6 +191,20 @@ interface Stat {
 interface Type {
   slot?: number;
   type?: Species;
+}
+
+// Api response
+
+export interface ApiResponse {
+  count: number;
+  next: string;
+  previous: null;
+  results: Result[];
+}
+
+export interface Result {
+  name: string;
+  url: string;
 }
 
 // Converts JSON strings to/from your types
