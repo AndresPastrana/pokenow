@@ -1,19 +1,32 @@
 :root {
-  --pokemon-red: #FF0000;
-  --pokemon-blue: #3B4CCA;
-  --pokemon-yellow: #FFDE00;
-  --pokemon-gold: #B3A125;
+  --pokemon-red: #FF6B6B;
+  --pokemon-blue: #4D96FF;
+  --pokemon-purple: #9B59B6;
+  --pokemon-yellow: #FFD93D;
+  --pokemon-gold: #F6E6C2;
 }
 
 @keyframes float {
-  0% {
-    transform: translateY(0px);
+
+  0%,
+  100% {
+    transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
+}
+
+@keyframes pulse {
+
+  0%,
   100% {
-    transform: translateY(0px);
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
   }
 }
 
@@ -22,8 +35,8 @@
 }
 
 .pokemon-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .favorite-button {
@@ -42,3 +55,69 @@
   transform: scale(1.1);
 }
 
+.card-hovered::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--pokemon-blue), var(--pokemon-purple), var(--pokemon-red), var(--pokemon-gold));
+  filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+  animation: animatedgradient 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+.card-hovered:hover::after {
+  opacity: 0.3;
+}
+
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.props-tab {
+  transition: all 0.3s ease;
+}
+
+.props-content {
+  transition: all 0.3s ease;
+}
+
+.stat-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-item:hover {
+  border-color: var(--pokemon-blue);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.bg-pokemon-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234D96FF' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}

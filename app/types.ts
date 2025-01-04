@@ -21,13 +21,13 @@ export interface PokemonDetails {
   past_abilities?: unknown[];
   past_types?: unknown[];
   species?: Species;
-  sprites?: Sprites;
+  sprites: Sprites;
   stats: Stat[];
   types: Type[];
   weight: number;
 }
 
-interface Ability {
+export interface Ability {
   ability: Species;
   is_hidden?: boolean;
   slot?: number;
@@ -188,7 +188,7 @@ interface Stat {
   stat: Species;
 }
 
-interface Type {
+export interface Type {
   slot?: number;
   type: Species;
 }

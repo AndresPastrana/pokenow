@@ -1,20 +1,22 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Heart } from "lucide-react";
+import { ChevronUp, Dumbbell, Heart, Ruler, Weight, Zap } from "lucide-react";
 
 import { useFavorites } from "@/app/contexts/FavoritesContext";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Ability, PokemonDetails, Type } from "@/app/types";
 
 interface PokemonCardProps {
-  pokemon: any;
+  pokemon: PokemonDetails;
 }
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
   const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const [isHovered, setIsHovered] = useState(false);
+  const [showProps, setShowProps] = useState(false);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -27,76 +29,135 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
   };
 
   return (
-    <Card className="pokemon-card w-full max-w-sm overflow-hidden transition-shadow duration-300 hover:shadow-lg bg-white">
-      <CardHeader className="bg-gradient-to-r from-pokemon-red to-pokemon-blue text-white p-3">
-        <CardTitle className="text-lg sm:text-xl capitalize">
+    <Card
+      className={`pokemon-card w-full max-w-xs overflow-hidden transition-all duration-300 hover:shadow-xl bg-gradient-to-r from-blue-100 to-purple-100 hover:from-blue-200 hover:to-purple-200 hover:-translate-y-2 relative ${
+        isHovered ? "card-hovered" : ""
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setShowProps(false);
+      }}
+    >
+      <CardHeader className="bg-gradient-to-r from-blue-100 to-purple-100 p-3 relative overflow-hidden transition-all duration-300 hover:from-blue-200 hover:to-purple-200">
+        <div className="absolute top-0 left-0 w-full h-full bg-pokemon-pattern opacity-5"></div>
+        <CardTitle className="text-xl font-bold capitalize relative z-10 text-gray-800">
           {pokemon.name}
         </CardTitle>
+        <div className="flex flex-wrap justify-start mt-1">
+          {pokemon.types.map((type: Type) => (
+            <span
+              key={type.type.name}
+              className="pokemon-type inline-block px-2 py-0.5 rounded-full bg-white text-gray-800 text-xs font-bold mr-1 mb-1 transition-transform duration-300 hover:scale-110 shadow-sm border border-gray-200"
+            >
+              {type.type.name}
+            </span>
+          ))}
+        </div>
       </CardHeader>
       <CardContent className="p-4">
-        <div className="flex justify-center mb-2">
-          {pokemon.sprites.front_default ? (
-            <Image
-              src={pokemon.sprites.front_default}
-              alt={pokemon.name}
-              width={120}
-              height={120}
-              className="transition-transform duration-300 hover:scale-110 animate-float"
-            />
-          ) : (
-            <div className="w-[120px] h-[120px] flex items-center justify-center bg-gray-200 text-gray-500">
-              No image
-            </div>
-          )}
+        <div className="flex justify-center mb-4 relative">
+          <div className="absolute w-24 h-24 bg-blue-100 rounded-full opacity-50 animate-pulse"></div>
+          <div className="w-[150px] h-[150px] flex items-center justify-center">
+            {pokemon.sprites.front_default ? (
+              <Image
+                src={pokemon.sprites.front_default}
+                alt={pokemon.name}
+                width={150}
+                height={150}
+                className="transition-transform duration-300 hover:scale-110 animate-float z-10 object-contain"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 rounded-full">
+                No image
+              </div>
+            )}
+          </div>
         </div>
-        <div className="text-sm">
-          <div className="mb-1">
-            <span className="font-semibold">Type(s): </span>
-            {pokemon.types.map((type: any, index: number) => (
-              <span
-                key={type.type.name}
-                className="pokemon-type inline-block px-2 py-1 rounded-full bg-pokemon-yellow text-pokemon-blue text-xs font-semibold mr-2 mb-2"
-              >
-                {type.type.name}
-              </span>
-            ))}
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="stat-item">
+            <div className="flex items-center mb-0.5">
+              <Zap className="w-4 h-4 mr-1 text-yellow-500" />
+              <span className="font-semibold text-gray-700">Abilities</span>
+            </div>
+            <div className="pl-5">
+              {pokemon.abilities.slice(0, 2).map((ability: Ability) => (
+                <span
+                  key={ability.ability.name}
+                  className="block capitalize text-gray-600"
+                >
+                  {ability.ability.name}
+                </span>
+              ))}
+              {pokemon.abilities.length > 2 && (
+                <span className="text-gray-500">...</span>
+              )}
+            </div>
           </div>
-          <div className="mb-1">
-            <span className="font-semibold">Height: </span>
-            {pokemon.height / 10} m
+          <div className="stat-item">
+            <div className="flex items-center mb-0.5">
+              <Ruler className="w-4 h-4 mr-1 text-blue-500" />
+              <span className="font-semibold text-gray-700">Height</span>
+            </div>
+            <div className="pl-5 text-gray-600">{pokemon.height / 10} m</div>
           </div>
-          <div>
-            <span className="font-semibold">Weight: </span>
-            {pokemon.weight / 10} kg
+          <div className="stat-item">
+            <div className="flex items-center mb-0.5">
+              <Weight className="w-4 h-4 mr-1 text-green-500" />
+              <span className="font-semibold text-gray-700">Weight</span>
+            </div>
+            <div className="pl-5 text-gray-600">{pokemon.weight / 10} kg</div>
+          </div>
+          <div className="stat-item">
+            <div className="flex items-center mb-0.5">
+              <Dumbbell className="w-4 h-4 mr-1 text-red-500" />
+              <span className="font-semibold text-gray-700">Base XP</span>
+            </div>
+            <div className="pl-5 text-gray-600">{pokemon.base_experience}</div>
           </div>
         </div>
         <div className="mt-4 relative">
           <Button
             variant="outline"
             size="sm"
-            className="favorite-button w-full mt-4 border-pokemon-red text-pokemon-red hover:bg-pokemon-red hover:text-white"
+            className="favorite-button w-full border-2 border-blue-400 text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 font-semibold py-1 text-xs"
             onClick={handleFavoriteClick}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
           >
             <Heart
-              className={`mr-2 h-4 w-4 ${
-                isFavorite(pokemon.name) ? "fill-pokemon-red" : ""
-              }`}
+              className={`mr-1 h-4 w-4 ${
+                isFavorite(pokemon.name) ? "fill-current" : ""
+              } transition-all duration-300`}
             />
             {isFavorite(pokemon.name)
               ? "Remove from Favorites"
               : "Add to Favorites"}
           </Button>
-          {isHovered && (
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded">
-              {isFavorite(pokemon.name)
-                ? "Remove from favorites"
-                : "Add to favorites"}
-            </div>
-          )}
         </div>
       </CardContent>
+      {isHovered && (
+        <div
+          className={`props-tab absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-3 py-1 rounded-t-lg cursor-pointer transition-all duration-300 ${
+            showProps ? "top-0" : ""
+          }`}
+          onClick={() => setShowProps(!showProps)}
+        >
+          <ChevronUp
+            className={`w-5 h-5 transition-transform duration-300 ${
+              showProps ? "rotate-180" : ""
+            }`}
+          />
+        </div>
+      )}
+      {showProps && (
+        <div className="props-content absolute top-full left-0 w-full bg-white border-t-2 border-blue-300 p-3 transition-all duration-300 transform translate-y-0 shadow-lg">
+          <h3 className="font-bold mb-1 text-blue-600 text-sm">
+            Pokémon Properties:
+          </h3>
+          <pre className="text-xs overflow-auto max-h-32 bg-gray-50 p-2 rounded">
+            {JSON.stringify(pokemon, null, 2)}
+          </pre>
+        </div>
+      )}
     </Card>
   );
 }
