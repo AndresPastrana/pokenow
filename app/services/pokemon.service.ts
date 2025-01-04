@@ -3,7 +3,6 @@ import { ApiResponse, PokemonDetails } from "../types";
 
 export class PokemonService {
   //TODO: Validate the load env with a zod schema
-  private static baseUrl: string = env_data.NEXT_PUBLIC_POKE_API_URL;
 
   static async fetchPaginatedPokemon(
     page: number,
@@ -19,7 +18,7 @@ export class PokemonService {
       const offset = (page - 1) * itemsPerPage;
 
       const response = await fetch(
-        `${this.baseUrl}/pokemon?limit=${itemsPerPage}&offset=${offset}`
+        `${env_data.NEXT_PUBLIC_POKE_API_URL}/pokemon?limit=${itemsPerPage}&offset=${offset}`
       );
 
       // Handle network or HTTP response errors
@@ -50,12 +49,16 @@ export class PokemonService {
 
   static async fetchPokemonDetailsByNameOrId(nameOrId: string) {
     try {
-      //  Get a pokemon by name or id
-      const resp = await fetch(`${this.baseUrl}/pokemon/${nameOrId}`);
+      //  Get a pokemon by name or
+
+      const resp = await fetch(
+        `${env_data.NEXT_PUBLIC_POKE_API_URL}/pokemon/${nameOrId}`
+      );
       const pokemonDetails = (await resp.json()) as PokemonDetails;
       return pokemonDetails;
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      throw new Error("Error loading pokemon info");
     }
   }
 
@@ -70,6 +73,35 @@ export class PokemonService {
     } catch (error) {
       console.log(error);
       throw new Error("error");
+    }
+  }
+
+  // In case needed but is not recommend
+  static async searchPokemon(query: string) {
+    try {
+      const response = await fetch(
+        `${env_data.NEXT_PUBLIC_POKE_API_URL}/pokemon?limit=1302&offset=0`
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch Pokémon data. Status: ${response.status}`
+        );
+      }
+
+      const { results } = (await response.json()) as ApiResponse;
+
+      const filteredResults = results.filter(({ name }) =>
+        name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      const urls = filteredResults.map(({ url }) => url);
+      const pokemonDetails = await this.loadPokemonsDetails(urls);
+
+      return pokemonDetails;
+    } catch (error) {
+      console.error("An error occurred while searching for Pokémon:", error);
+      throw new Error("Error");
     }
   }
 }

@@ -1,20 +1,38 @@
-"use server";
-import { notFound } from "next/navigation";
-import PokemonDetails from "@/components/PokemonDetails";
+"use client";
+import { notFound, useParams } from "next/navigation";
 import { PokemonService } from "@/app/services/pokemon.service";
-// import ErrorMessage from "@/components/ErrorMessage";
+import { PokemonDetails as PokemonDetailsType } from "@/app/types";
+import { useFetch } from "@/app/hooks/useFetch";
+import PokemonDetails from "@/components/PokemonDetails";
 
-export default async function PokemonPage({
-  params,
-}: {
-  params: { name: string };
-}) {
-  const pokemon = await PokemonService.fetchPokemonDetailsByNameOrId(
-    params.name.toLowerCase()
+export default function PokemonPage() {
+  const { name } = useParams<{ name: string }>();
+
+  if (!name) {
+    notFound();
+  }
+
+  // Use the custom useFetch hook
+  const {
+    data: pokemon,
+    error,
+    loading,
+  } = useFetch<PokemonDetailsType, string>(
+    PokemonService.fetchPokemonDetailsByNameOrId,
+    name.toLowerCase()
   );
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    console.error(error);
+    return <div>Something went wrong while fetching the Pokémon data.</div>;
+  }
+
   if (!pokemon) {
-    notFound();
+    return <div>Pokemon not found</div>;
   }
 
   return (

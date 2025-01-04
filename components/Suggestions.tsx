@@ -1,12 +1,12 @@
-import { usePokemon } from "@/app/contexts/PokemonContext";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { buttonVariants } from "./ui/button";
 import { searchSubstring } from "@/lib/const";
+import useFilteredPokemons from "@/app/hooks/useFilteredPokemons";
 
 export const Suggestions = () => {
-  const { filteredPokemon } = usePokemon();
+  const { filteredPokemon } = useFilteredPokemons();
 
   const searchParams = useSearchParams();
 
