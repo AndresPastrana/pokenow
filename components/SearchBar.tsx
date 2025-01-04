@@ -1,10 +1,10 @@
 "use client";
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import { useUpdateCurrentSearchParams } from "@/app/hooks/useUpdateCurrentSearchParams";
 import Filter from "./Filters";
+// import { Suggestions } from "./Suggestions";
 
 export default function SearchBar() {
   const searchParams = useSearchParams();
@@ -28,8 +28,6 @@ export default function SearchBar() {
   // Update the URL with the search term every time the input changes, but debounce the updates to avoid excessive URL updates
   // const debouncedUpdateUrl = useDebounceCallback(update_url, 400);
 
-  const [isLoading] = useState(false);
-
   return (
     <div className="w-full">
       <div className="relative">
@@ -42,12 +40,6 @@ export default function SearchBar() {
         />
       </div>
       <Filter />
-      <Button
-        type="submit"
-        className="w-full mt-2 bg-pokemon-blue hover:bg-pokemon-red text-white transition-colors duration-300"
-      >
-        {isLoading ? "Searching..." : "Search"}
-      </Button>
     </div>
   );
 }

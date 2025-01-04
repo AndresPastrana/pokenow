@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUpdateCurrentSearchParams } from "@/app/hooks/useUpdateCurrentSearchParams";
+import { Suggestions } from "./Suggestions";
 
 const Filter = () => {
   const router = useRouter();
@@ -46,37 +47,33 @@ const Filter = () => {
   };
 
   return (
-    <form className="flex flex-col space-y-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg md:flex-row md:space-y-0 md:space-x-4">
-      {["base_experience", "height", "weight"].map((field) => (
-        <div className="flex flex-col" key={field}>
-          <Label
-            htmlFor={field}
-            className="text-gray-700 dark:text-gray-300 capitalize"
-          >
-            {field.replace("_", " ")}
-          </Label>
-          <Input
-            id={field}
-            name={field}
-            type="number"
-            placeholder={`e.g. ${field === "base_experience" ? "100" : "10"}`}
-            value={filters[field as keyof typeof filters]}
-            onChange={handleChange}
-          />
-        </div>
-      ))}
-      <div className="flex items-center space-x-2">
-        <Button
-          type="submit"
-          className="bg-blue-500 text-white hover:bg-blue-600"
-        >
-          Apply
-        </Button>
+    <div className="flex flex-row gap-3 max-w-">
+      <form className=" mt-2 flex flex-col space-y-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg  md:space-y-0 md:space-x-4">
+        {["base_experience", "height", "weight"].map((field) => (
+          <div className="flex flex-col" key={field}>
+            <Label
+              htmlFor={field}
+              className="mb-2 text-gray-700 dark:text-gray-300 capitalize"
+            >
+              {field.replace("_", " ")}
+            </Label>
+            <Input
+              id={field}
+              name={field}
+              type="number"
+              placeholder={`e.g. ${field === "base_experience" ? "100" : "10"}`}
+              value={filters[field as keyof typeof filters]}
+              onChange={handleChange}
+            />
+          </div>
+        ))}
+
         <Button type="button" variant="ghost" onClick={handleReset}>
           Reset
         </Button>
-      </div>
-    </form>
+      </form>
+      <Suggestions />
+    </div>
   );
 };
 
