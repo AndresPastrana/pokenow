@@ -1,13 +1,15 @@
-import { usePokemon } from "@/app/contexts/PokemonContext";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { usePokemon } from "@/app/contexts/PokemonContext";
+import useFilteredPokemons from "@/app/hooks/useFilteredPokemons";
+import { env_data } from "@/lib/env";
 import PokemonCard from "./PokemonCard";
 import { LoadingCards } from "./ui/loading";
 import ErrorMessage from "./ErrorMessage";
-import { env_data } from "@/lib/env";
 
 const FilteredPokemons = () => {
-  const { filteredPokemon, loading, error } = usePokemon();
+  const { loading, error } = usePokemon();
+  const { filteredPokemon } = useFilteredPokemons();
 
   if (error) {
     return <ErrorMessage message={error} />;
