@@ -11,6 +11,13 @@ export const Suggestions = () => {
   const searchParams = useSearchParams();
 
   const search = searchParams.get("search");
+  const pokemon_details_url = (nameOrId: string) => {
+    const origin = window.location.origin;
+    const pathname = "pokemon";
+    const url = `${origin}/${pathname}/${nameOrId}`;
+
+    return url;
+  };
   return (
     <div className="grow max-h-[268px] overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-gray-300 ">
       <div className="flex flex-col p-3">
@@ -21,7 +28,7 @@ export const Suggestions = () => {
               .filter((d) => searchSubstring(d.name, search))
               .map((p) => (
                 <Link
-                  href={"#"}
+                  href={pokemon_details_url(p.name)}
                   key={p.name}
                   className={`${buttonVariants({
                     variant: "outline",
@@ -31,7 +38,7 @@ export const Suggestions = () => {
                 </Link>
               ))
           ) : (
-            <p className="text-gray-500 text-sm">{"No found recomms"}</p>
+            <p className="text-gray-500 text-sm">{"Nothing to show"}</p>
           )
         ) : (
           <p className="text-gray-500 text-sm">

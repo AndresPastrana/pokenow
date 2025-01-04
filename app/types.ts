@@ -5,7 +5,7 @@
 //   const welcome = Convert.toWelcome(json);
 
 export interface PokemonDetails {
-  abilities?: Ability[];
+  abilities: Ability[];
   base_experience: number;
   cries?: Cries;
   forms?: Species[];
@@ -22,20 +22,20 @@ export interface PokemonDetails {
   past_types?: unknown[];
   species?: Species;
   sprites?: Sprites;
-  stats?: Stat[];
-  types?: Type[];
+  stats: Stat[];
+  types: Type[];
   weight: number;
 }
 
 interface Ability {
-  ability?: Species;
+  ability: Species;
   is_hidden?: boolean;
   slot?: number;
 }
 
 interface Species {
-  name?: string;
-  url?: string;
+  name: string;
+  url: string;
 }
 
 interface Cries {
@@ -185,12 +185,12 @@ interface GenerationViii {
 interface Stat {
   base_stat?: number;
   effort?: number;
-  stat?: Species;
+  stat: Species;
 }
 
 interface Type {
   slot?: number;
-  type?: Species;
+  type: Species;
 }
 
 // Api response

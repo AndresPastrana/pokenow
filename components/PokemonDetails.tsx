@@ -1,13 +1,14 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PokemonDetails as PokemonDetailsType } from "@/app/types";
 
-interface PokemonDetailsProps {
-  pokemon: any
-}
-
-export default function PokemonDetails({ pokemon }: PokemonDetailsProps) {
+export default function PokemonDetails({
+  pokemon,
+}: {
+  pokemon: PokemonDetailsType;
+}) {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="bg-blue-500 text-white">
@@ -16,7 +17,7 @@ export default function PokemonDetails({ pokemon }: PokemonDetailsProps) {
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
           <div className="w-48 h-48 relative">
-            {pokemon.sprites.front_default ? (
+            {pokemon.sprites?.front_default ? (
               <Image
                 src={pokemon.sprites.front_default}
                 alt={pokemon.name}
@@ -36,7 +37,7 @@ export default function PokemonDetails({ pokemon }: PokemonDetailsProps) {
               <div>
                 <dt className="font-semibold">Type(s):</dt>
                 <dd>
-                  {pokemon.types.map((type: any) => (
+                  {pokemon.types.map((type) => (
                     <span key={type.type.name} className="capitalize mr-2">
                       {type.type.name}
                     </span>
@@ -46,8 +47,11 @@ export default function PokemonDetails({ pokemon }: PokemonDetailsProps) {
               <div>
                 <dt className="font-semibold">Abilities:</dt>
                 <dd>
-                  {pokemon.abilities.map((ability: any) => (
-                    <span key={ability.ability.name} className="capitalize mr-2">
+                  {pokemon.abilities.map((ability) => (
+                    <span
+                      key={ability.ability.name}
+                      className="capitalize mr-2"
+                    >
                       {ability.ability.name}
                     </span>
                   ))}
@@ -68,9 +72,11 @@ export default function PokemonDetails({ pokemon }: PokemonDetailsProps) {
             </dl>
             <h2 className="text-xl font-semibold mt-6 mb-4">Stats</h2>
             <dl className="grid grid-cols-2 gap-4">
-              {pokemon.stats.map((stat: any) => (
+              {pokemon.stats.map((stat) => (
                 <div key={stat.stat.name}>
-                  <dt className="font-semibold capitalize">{stat.stat.name}:</dt>
+                  <dt className="font-semibold capitalize">
+                    {stat.stat.name}:
+                  </dt>
                   <dd>{stat.base_stat}</dd>
                 </div>
               ))}
@@ -84,6 +90,5 @@ export default function PokemonDetails({ pokemon }: PokemonDetailsProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-

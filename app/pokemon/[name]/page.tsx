@@ -1,26 +1,17 @@
+"use server";
 import { notFound } from "next/navigation";
 import PokemonDetails from "@/components/PokemonDetails";
+import { PokemonService } from "@/app/services/pokemon.service";
 // import ErrorMessage from "@/components/ErrorMessage";
-
-async function getPokemon(name: string) {
-  try {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch pokemon");
-    }
-    return res.json();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error: unknown) {
-    return null;
-  }
-}
 
 export default async function PokemonPage({
   params,
 }: {
   params: { name: string };
 }) {
-  const pokemon = await getPokemon(params.name);
+  const pokemon = await PokemonService.fetchPokemonDetailsByNameOrId(
+    params.name.toLowerCase()
+  );
 
   if (!pokemon) {
     notFound();
