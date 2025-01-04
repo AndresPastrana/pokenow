@@ -6,17 +6,15 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import PokemonCard from "@/components/PokemonCard";
 import ErrorMessage from "@/components/ErrorMessage";
-import TypeFilter from "@/components/TypeFilter";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
-
 import { PokemonDetails } from "./types";
 
 export default function Home() {
   const [pokemon, setPokemon] = useState<PokemonDetails[]>([]);
   const [filteredPokemon, setFilteredPokemon] = useState<PokemonDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedType] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 12;
@@ -57,47 +55,6 @@ export default function Home() {
     }
   };
 
-  const handleSearch = async (searchedPokemon: PokemonDetails) => {
-    setError(null);
-    setPokemon([searchedPokemon]);
-    setTotalPages(1);
-    setCurrentPage(1);
-  };
-
-  const handleTyping = async (query: string) => {
-    if (query.length < 2) {
-      fetchPokemon(1);
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`
-      );
-      if (!response.ok) {
-        throw new Error("Pokemon not found");
-      }
-      const data = await response.json();
-      setPokemon([data]);
-      setTotalPages(1);
-      setCurrentPage(1);
-      setError(null);
-    } catch (error) {
-      console.error("Error searching Pokemon:", error);
-      setError("No Pokémon found. Try a different name or ID.");
-    }
-  };
-
-  const handleError = (errorMessage: string) => {
-    setError(errorMessage);
-    setPokemon([]);
-  };
-
-  const handleFilterChange = (type: string) => {
-    setSelectedType(type);
-    setCurrentPage(1);
-  };
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -106,14 +63,10 @@ export default function Home() {
     <div className="flex flex-col items-center space-y-8">
       <div className="flex flex-col sm:flex-row w-full max-w-4xl gap-4 mb-8">
         <div className="flex-grow">
-          <SearchBar
-            onSearch={handleSearch}
-            onError={handleError}
-            onTyping={handleTyping}
-          />
+          <SearchBar />
         </div>
         <div className="flex flex-col sm:flex-row gap-4">
-          <TypeFilter onFilterChange={handleFilterChange} />
+          {/* <TypeFilter onFilterChange={handleFilterChange} /> */}
           <Link href="/favorites">
             <Button variant="outline" className="w-full sm:w-auto">
               Go to Favorites

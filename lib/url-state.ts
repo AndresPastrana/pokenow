@@ -1,7 +1,8 @@
 export interface SearchParams {
   search?: string;
-  base_experience?: number;
-  height?: number;
+  base_experience?: string;
+  height?: string;
+  weight?: string;
 }
 
 /**
@@ -31,11 +32,11 @@ export function parseSearchParams(
 ): SearchParams {
   return {
     search: typeof params.search === "string" ? params.search : undefined,
-    height:
-      typeof params.height === "number" ? parseInt(params.height) : undefined,
+    height: typeof params.height === "string" ? params.height : undefined,
+    weight: typeof params.weight === "string" ? params.weight : undefined,
     base_experience:
-      typeof params.base_experience === "number"
-        ? parseInt(params.base_experience)
+      typeof params.base_experience === "string"
+        ? params.base_experience
         : undefined,
   };
 }

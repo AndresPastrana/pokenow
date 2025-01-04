@@ -1,61 +1,49 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect, useRef } from "react";
+"use client";
+import { useState, ChangeEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
+import { useUpdateCurrentSearchParams } from "@/app/hooks/useUpdateCurrentSearchParams";
+import Filter from "./Filters";
 
-interface SearchBarProps {
-  onSearch: (pokemon: unknown) => void;
-  onError: (message: string) => void;
-  onTyping: (query: string) => void;
-}
+export default function SearchBar() {
+  const searchParams = useSearchParams();
 
-export default function SearchBar({
-  onSearch,
-  onError,
-  onTyping,
-}: SearchBarProps) {
-  const [query, setQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { updateSearchParams } = useUpdateCurrentSearchParams();
 
-  useEffect(() => {
-    if (query.length > 1) {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-      searchTimeoutRef.current = setTimeout(() => {
-        onTyping(query);
-      }, 300);
-    } else if (query.length === 0) {
-      onTyping("");
+  const update_url = (e: ChangeEvent<HTMLInputElement>) => {
+    // Create a mutable copy of the searchParams
+    const params = new URLSearchParams(searchParams);
+    const search_term = e.target.value;
+
+    if (search_term.length >= 1) {
+      params.set("search", encodeURIComponent(search_term));
+    } else {
+      // Remove from the url
+      params.delete("search");
     }
-
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, [query, onTyping]);
-
-  const handleSearch = () => {
-    if (!query) return;
-    onTyping(query);
+    updateSearchParams(params);
   };
+
+  // Update the URL with the search term every time the input changes, but debounce the updates to avoid excessive URL updates
+  // const debouncedUpdateUrl = useDebounceCallback(update_url, 400);
+
+  const [isLoading] = useState(false);
 
   return (
     <div className="w-full">
       <div className="relative">
         <Input
+          defaultValue={searchParams.get("search") || ""}
           type="text"
           placeholder="Search Pokémon by name or ID"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={update_url}
           className="w-full p-2 border rounded bg-white focus:ring-2 focus:ring-pokemon-blue focus:border-transparent"
         />
       </div>
+      <Filter />
       <Button
-        onClick={handleSearch}
-        disabled={isLoading}
+        type="submit"
         className="w-full mt-2 bg-pokemon-blue hover:bg-pokemon-red text-white transition-colors duration-300"
       >
         {isLoading ? "Searching..." : "Search"}
