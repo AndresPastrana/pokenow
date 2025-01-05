@@ -2,7 +2,7 @@ import test from "@playwright/test";
 
 test.describe("Ui render", () => {
   test("should display main elements on the homepage", async ({ page }) => {
-    await page.goto("http://localhost:3000/");
+    await page.goto("/");
 
     await Promise.all([
       page.getByRole("heading", { name: "PokeNow" }).isVisible(),
