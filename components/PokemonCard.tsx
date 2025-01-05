@@ -118,6 +118,9 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
         </div>
         <div className="mt-4 relative">
           <Button
+            data-testid={`btn_is_favorite_${isFavorite(pokemon.name)}_${
+              pokemon.name
+            }`}
             variant="outline"
             size="sm"
             className="favorite-button w-full border-2 border-blue-400 text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 font-semibold py-1 text-xs"

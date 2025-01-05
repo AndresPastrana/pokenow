@@ -19,13 +19,20 @@ const FilteredPokemons = () => {
     return <LoadingCards items_cant={env_data.POKEMONS_BY_PAGE} />;
   }
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8 w-full max-w-7xl">
-      {filteredPokemon.map((p) => (
-        <Link href={`/pokemon/${p.name}`} key={p.id}>
+    <section
+      data-testid="pokemons_section"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8 w-full max-w-7xl"
+    >
+      {filteredPokemon.map((p, index) => (
+        <Link
+          data-testid={`pokemon_card_${index}`}
+          href={`/pokemon/${p.name}`}
+          key={p.id}
+        >
           <PokemonCard pokemon={p} />
         </Link>
       ))}
-    </div>
+    </section>
   );
 };
 

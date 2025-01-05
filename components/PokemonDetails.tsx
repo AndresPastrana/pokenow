@@ -13,7 +13,10 @@ export default function PokemonDetails({
   return (
     <Card className="w-full max-w-xl mx-auto rounded-xl shadow-lg bg-gradient-to-br from-blue-500 to-indigo-600 p-4">
       <CardHeader className="bg-transparent p-0">
-        <CardTitle className="text-4xl capitalize text-white text-center font-extrabold drop-shadow-lg">
+        <CardTitle
+          data-testid={`${pokemon.name}`}
+          className="text-4xl capitalize text-white text-center font-extrabold drop-shadow-lg"
+        >
           {pokemon.name}
         </CardTitle>
       </CardHeader>
