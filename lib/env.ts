@@ -13,8 +13,11 @@ const api_url_fallback = "https://pokeapi.co/api/v2/";
  * - `POKEMONS_BY_PAGE`: Ensures it's a positive number.
  */
 const envSchema = z.object({
-  NEXT_PUBLIC_POKE_API_URL: z.string().url(),
-  POKEMONS_BY_PAGE: z.number().min(1),
+  NEXT_PUBLIC_POKE_API_URL: z.string().url().default(api_url_fallback),
+  POKEMONS_BY_PAGE: z.preprocess(
+    (val) => Number(val) || fallback_pokemons_per_page,
+    z.number().min(1)
+  ),
 });
 
 /**
@@ -49,9 +52,8 @@ if (parsedEnv.error) {
   );
 }
 
-console.log(parsedEnv.data);
-
 /**
  * Exported validated environment variables, frozen to prevent modification.
  */
+
 export const env_data = Object.freeze({ ...parsedEnv.data });

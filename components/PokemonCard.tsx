@@ -135,6 +135,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               ? "Remove from Favorites"
               : "Add to Favorites"}
           </Button>
+          <p>{`btn_is_favorite_${isFavorite(pokemon.name)}_${pokemon.name}`}</p>
         </div>
       </CardContent>
       {isHovered && (

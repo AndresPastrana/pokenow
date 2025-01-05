@@ -26,8 +26,6 @@ const useFilteredPokemons = () => {
 
   useEffect(() => {
     const filterPokemon = () => {
-      console.log("FILTERING");
-
       // Just filter if exits some filter active in the context
       //   If there is no filter active return all elements
 
