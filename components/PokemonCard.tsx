@@ -99,7 +99,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               <Ruler className="w-4 h-4 mr-1 text-blue-500" />
               <span className="font-semibold text-gray-700">Height</span>
             </div>
-            <div className="pl-5 text-gray-600">{pokemon.height / 10} m</div>
+            <div className="pl-5 text-gray-600">{pokemon.height / 10} m</div>``
           </div>
           <div className="stat-item">
             <div className="flex items-center mb-0.5">
@@ -118,6 +118,9 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
         </div>
         <div className="mt-4 relative">
           <Button
+            data-testid={`btn_is_favorite_${isFavorite(pokemon.name)}_${
+              pokemon.name
+            }`}
             variant="outline"
             size="sm"
             className="favorite-button w-full border-2 border-blue-400 text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 font-semibold py-1 text-xs"
