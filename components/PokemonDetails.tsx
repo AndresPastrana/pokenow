@@ -254,7 +254,7 @@ export default function PokemonDetailsSection({
   }, [species]);
 
   return (
-    <Card className="w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg py-7 px-5">
+    <Card className="animate-ease-in w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg py-7 px-5">
       <section className="flex flex-col gap-3">
         <section className="flex justify-between">
           <Link href="/">

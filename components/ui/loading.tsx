@@ -1,4 +1,6 @@
+import { Badge } from "./badge";
 import { Skeleton } from "./skeleton";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export const LoadingCards = ({ items_cant }: { items_cant: number }) => {
   return (
@@ -60,3 +62,71 @@ export const LoadingCards = ({ items_cant }: { items_cant: number }) => {
     </div>
   );
 };
+
+const PokemonSkeleton: React.FC = () => {
+  return (
+    <Card className="animate-ease-out w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg py-7 px-5">
+      <section className="flex flex-col gap-3">
+        {/* Header section */}
+        <section className="flex justify-between">
+          <Skeleton className="h-8 w-28 bg-gray-300 rounded-md" />
+          <Skeleton className="h-8 w-32 bg-gray-300 rounded-md" />
+        </section>
+
+        {/* Title and species */}
+        <section className="mx-auto">
+          <div className="w-fit flex flex-col items-start">
+            <Skeleton className="h-12 w-48 bg-gray-300 mb-4 rounded-md" />
+            <Skeleton className="h-6 w-32 bg-gray-300 mb-4 rounded-md" />
+
+            {/* Pokémon Types */}
+            <div className="flex justify-center mt-4 space-x-2">
+              <Skeleton className="h-6 w-24 bg-gray-300 rounded-full" />
+              <Skeleton className="h-6 w-24 bg-gray-300 rounded-full" />
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <div className="flex flex-col md:flex-row items-center">
+        {/* Image section */}
+        <section className="w-4/12 flex flex-col items-center justify-center h-full overflow-hidden p-1">
+          <Skeleton className="h-48 w-48 bg-gray-300 rounded-md" />
+        </section>
+
+        {/* Tabs section */}
+        <section className="w-8/12 h-full">
+          <div className="text-center mt-4">
+            <Skeleton className="h-8 w-28 bg-gray-300 mb-4 rounded-md" />
+            <Card className="mb-4 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <Skeleton className="h-8 w-32 bg-gray-300 mb-2 rounded-md" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-4 w-24 bg-gray-300 mb-2 rounded-md" />
+                <Skeleton className="h-4 w-24 bg-gray-300 mb-2 rounded-md" />
+                <Skeleton className="h-4 w-24 bg-gray-300 mb-2 rounded-md" />
+              </CardContent>
+            </Card>
+            <Card className="mb-4 bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <Skeleton className="h-8 w-32 bg-gray-300 mb-2 rounded-md" />
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <Badge key={index}>
+                      <Skeleton className="h-6 w-20 bg-gray-300 rounded-full" />
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      </div>
+    </Card>
+  );
+};
+
+export default PokemonSkeleton;

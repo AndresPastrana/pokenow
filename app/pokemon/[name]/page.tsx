@@ -4,6 +4,7 @@ import { PokemonService } from "@/app/services/pokemon.service";
 import { PokemonDetails as PokemonDetailsType } from "@/app/types";
 import { useFetch } from "@/app/hooks/useFetch";
 import PokemonDetails from "@/components/PokemonDetails";
+import PokemonSkeleton from "@/components/ui/loading";
 
 export default function PokemonPage() {
   const { name } = useParams<{ name: string }>();
@@ -23,7 +24,7 @@ export default function PokemonPage() {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <PokemonSkeleton />;
   }
 
   if (error) {
