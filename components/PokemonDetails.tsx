@@ -98,7 +98,7 @@ const PokemonTabs: React.FC<{ pokemon: PokemonDetailsType }> = ({
           </TabsTrigger>
         ))}
       </TabsList>
-      <div className="h-[400px] overflow-y-auto mt-4 pr-4">
+      <div className="h-[400px] overflow-y-auto mt-4 pr-2 sm:pr-4">
         <TabsContent value="about" key="about">
           <Card className="mb-4 bg-white/80 backdrop-blur-sm">
             <CardHeader className="p-2 sm:p-3 lg:p-5">
@@ -313,7 +313,7 @@ export default function PokemonDetailsSection({
       </section>
       <div className="flex flex-col md:flex-row  items-center mt-3">
         {/* Image section */}
-        <section className="w-4/12 flex flex-col items-center justify-center  h-full overflow-hidden p-1">
+        <section className="w-full md:w-4/12 flex flex-col  items-center justify-center md:items-start md:justify-start  h-full overflow-hidden p-1">
           {pokemon.sprites?.other?.["official-artwork"]?.front_default ? (
             <Image
               width={235}
@@ -330,7 +330,7 @@ export default function PokemonDetailsSection({
           )}
         </section>
         {/* Tabs section */}
-        <section className="w-8/12 h-full">
+        <section className="w-full md:w-8/12 h-full">
           <div className="text-center mt-4">
             <PokemonTabs pokemon={pokemon} />
           </div>

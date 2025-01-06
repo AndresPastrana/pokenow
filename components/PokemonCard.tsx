@@ -30,7 +30,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
 
   return (
     <Card
-      className={`pokemon-card w-full max-w-xs overflow-hidden transition-all duration-300 hover:shadow-xl bg-gradient-to-r from-blue-100 to-purple-100 hover:from-blue-200 hover:to-purple-200 hover:-translate-y-2 relative ${
+      className={`pokemon-card  min-w-72  sm:min-w- overflow-hidden transition-all duration-300 hover:shadow-xl bg-gradient-to-r from-blue-100 to-purple-100 hover:from-blue-200 hover:to-purple-200 hover:-translate-y-2 relative ${
         isHovered ? "card-hovered" : ""
       }`}
       onMouseEnter={() => setIsHovered(true)}
