@@ -6,14 +6,15 @@ import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { Oxanium } from "next/font/google";
 
 const oxanium = Oxanium({
-  subsets: ["latin"], // Use the Latin subset for standard characters
-  weight: "400", // Default weight for a clean, thin look
-  display: "swap", // Optimize loading
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
 });
 
 export const metadata = {
-  title: "PokeNow",
-  description: "Search and explore Pokémon information",
+  title: "PokeNow: Your Pokémon Encyclopedia",
+  description:
+    "Dive into the world of Pokémon! Discover stats, abilities, evolutions, and more.",
 };
 
 export default function RootLayout({
@@ -24,16 +25,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${oxanium.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen p-4 sm:p-6 md:p-8`}
+        className={`${oxanium.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen p-1 sm:p-3 md:p-8`}
       >
         <FavoritesProvider>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <header className="mb-8 text-center">
-              <h1 className="text-4xl font-bold text-blue-600">PokeNow</h1>
+              <h1 className="text-4xl font-bold text-blue-600">
+                PokeNow: Unleash the Adventure
+              </h1>
               <p className="text-gray-600">
-                Search and explore Pokémon information
+                Dive into the world of Pokémon – discover stats, abilities, and
+                more!
               </p>
             </header>
+
             <main>{children}</main>
           </div>
         </FavoritesProvider>
