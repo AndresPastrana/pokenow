@@ -25,6 +25,7 @@ const FilteredPokemons = () => {
     >
       {filteredPokemon.map((p, index) => (
         <Link
+          className="mx-auto sm:mx-0"
           data-testid={`pokemon_card_${index}`}
           href={`/pokemon/${p.name}`}
           key={p.id}
