@@ -1,0 +1,17 @@
+# TODO List
+
+1. **Pokemon Details Page UI** (1 hr)
+    - Skeleton UI when loading (10 min)
+
+
+    
+
+2. **Fix Responsive Issues in All Views** (1 hr 30 min)
+
+3. **Fix Pokemon Card Navigation Issue on Mobile Devices** (30 min)
+
+4. **Advanced Search for All Pokemons** (1 hr)
+
+5. **Update the `template.env` File** (10 min)
+
+6. **Add Dark Mode** (1 hr)
