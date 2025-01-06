@@ -17,6 +17,18 @@ export const getTypeColor = (type: string) => {
     psychic: "bg-purple-500",
     fairy: "bg-pink-500",
     dragon: "bg-indigo-500",
+    normal: "bg-gray-400",
+
+    ice: "bg-blue-300",
+    fighting: "bg-red-600",
+    poison: "bg-purple-500",
+    ground: "bg-yellow-600",
+    flying: "bg-indigo-400",
+    bug: "bg-green-400",
+    rock: "bg-yellow-700",
+    ghost: "bg-purple-600",
+    dark: "bg-gray-700",
+    steel: "bg-gray-400",
   };
   return colors[type] || "bg-gray-400";
 };
