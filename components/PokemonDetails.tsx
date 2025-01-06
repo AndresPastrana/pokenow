@@ -101,12 +101,12 @@ const PokemonTabs: React.FC<{ pokemon: PokemonDetailsType }> = ({
       <div className="h-[400px] overflow-y-auto mt-4 pr-4">
         <TabsContent value="about" key="about">
           <Card className="mb-4 bg-white/80 backdrop-blur-sm">
-            <CardHeader>
+            <CardHeader className="p-2 sm:p-3 lg:p-5">
               <CardTitle className="text-blue-800">About</CardTitle>
             </CardHeader>
-            <CardContent>
-              <dl className="grid grid-cols-2 gap-4">
-                <div className="flex items-center">
+            <CardContent className="p-2 sm:p-3  lg:p-5 pt-0">
+              <dl className="flex flex-wrap gap-y-2 gap-x-2">
+                <div className="flex items-center ">
                   <Ruler className="w-5 h-5 mr-2 text-blue-500" />
                   <dt className="font-semibold mr-2 text-blue-700">Height:</dt>
                   <dd>{height / 10} m</dd>
@@ -116,9 +116,9 @@ const PokemonTabs: React.FC<{ pokemon: PokemonDetailsType }> = ({
                   <dt className="font-semibold mr-2 text-blue-700">Weight:</dt>
                   <dd>{weight / 10} kg</dd>
                 </div>
-                <div className="flex items-center">
+                <div className="items-center flex flex-wrap">
                   <Zap className="w-5 h-5 mr-2 text-yellow-500" />
-                  <dt className="font-semibold mr-2 text-blue-700">
+                  <dt className="flex flex-wrap font-semibold mr-2 text-blue-700">
                     Abilities:
                   </dt>
                   <dd>
@@ -254,7 +254,7 @@ export default function PokemonDetailsSection({
   }, [species]);
 
   return (
-    <Card className="animate-ease-in w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg py-7 px-5">
+    <Card className="animate-ease-in w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg p-2 md:py-7 md:px-5">
       <section className="flex flex-col gap-3">
         <section className="flex justify-between">
           <Link href="/">
@@ -279,9 +279,11 @@ export default function PokemonDetailsSection({
                 isFavorite(pokemon.name) ? "fill-current" : ""
               } transition-all duration-300`}
             />
-            {isFavorite(pokemon.name)
-              ? "Remove from Favorites"
-              : "Add to Favorites"}
+            <span className="hidden sm:block">
+              {isFavorite(pokemon.name)
+                ? "Remove from Favorites"
+                : "Add to Favorites"}
+            </span>
           </Button>
         </section>
         <section className="mx-auto">
@@ -309,7 +311,7 @@ export default function PokemonDetailsSection({
           </div>
         </section>
       </section>
-      <div className="flex flex-col md:flex-row  items-center">
+      <div className="flex flex-col md:flex-row  items-center mt-3">
         {/* Image section */}
         <section className="w-4/12 flex flex-col items-center justify-center  h-full overflow-hidden p-1">
           {pokemon.sprites?.other?.["official-artwork"]?.front_default ? (
