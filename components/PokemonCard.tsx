@@ -99,7 +99,7 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               <Ruler className="w-4 h-4 mr-1 text-blue-500" />
               <span className="font-semibold text-gray-700">Height</span>
             </div>
-            <div className="pl-5 text-gray-600">{pokemon.height / 10} m</div>
+            <div className="pl-5 text-gray-600">{pokemon.height / 10} m</div>``
           </div>
           <div className="stat-item">
             <div className="flex items-center mb-0.5">
@@ -135,7 +135,6 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
               ? "Remove from Favorites"
               : "Add to Favorites"}
           </Button>
-          <p>{`btn_is_favorite_${isFavorite(pokemon.name)}_${pokemon.name}`}</p>
         </div>
       </CardContent>
       {isHovered && (

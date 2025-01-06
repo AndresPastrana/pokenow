@@ -255,54 +255,37 @@ export default function PokemonDetailsSection({
 
   return (
     <Card className="w-full max-w-4xl mx-auto overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 shadow-lg py-7 px-5">
-      {/* {JSON.stringify(pokemon)} */}
-      <section className="flex justify-between items-center ">
-        <Link href="/">
+      <section className="flex flex-col gap-3">
+        <section className="flex justify-between">
+          <Link href="/">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
+            </Button>
+          </Link>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+            className="border-2 border-red-400 text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-300 font-semibold"
+            onClick={handleFavoriteClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
-          </Button>
-        </Link>
-        <Button
-          variant="outline"
-          size="sm"
-          className="border-2 border-red-400 text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-300 font-semibold"
-          onClick={handleFavoriteClick}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <Heart
-            className={`mr-2 h-4 w-4 ${
-              isFavorite(pokemon.name) ? "fill-current" : ""
-            } transition-all duration-300`}
-          />
-          {isFavorite(pokemon.name)
-            ? "Remove from Favorites"
-            : "Add to Favorites"}
-        </Button>
-      </section>
-      <div className="flex ">
-        <section className="w-4/12  flex flex-col items-center justify-center h-full overflow-hidden p-3">
-          {pokemon.sprites?.other?.["official-artwork"]?.front_default ? (
-            <Image
-              width={200}
-              height={200}
-              src={pokemon.sprites.other["official-artwork"].front_default}
-              alt={pokemon.name}
-              objectFit="contain"
-              className="transition-transform duration-300 hover:scale-110 animate-float z-10 object-contain"
+            <Heart
+              className={`mr-2 h-4 w-4 ${
+                isFavorite(pokemon.name) ? "fill-current" : ""
+              } transition-all duration-300`}
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
-              No image
-            </div>
-          )}
+            {isFavorite(pokemon.name)
+              ? "Remove from Favorites"
+              : "Add to Favorites"}
+          </Button>
         </section>
-        <section className="w-8/12 h-full">
-          <div className="text-center mt-4">
+        <section className="mx-auto">
+          <div className="w-fit  flex flex-col items-start">
             <CardTitle className="text-4xl font-bold capitalize mb-2 text-blue-800">
               {pokemon.name}
             </CardTitle>
@@ -324,8 +307,31 @@ export default function PokemonDetailsSection({
             {/*Pokemon Types here */}
             <PokemonTypes types={pokemon.types} />
           </div>
-
-          <PokemonTabs pokemon={pokemon} />
+        </section>
+      </section>
+      <div className="flex flex-col md:flex-row  items-center">
+        {/* Image section */}
+        <section className="w-4/12 flex flex-col items-center justify-center  h-full overflow-hidden p-1">
+          {pokemon.sprites?.other?.["official-artwork"]?.front_default ? (
+            <Image
+              width={235}
+              height={235}
+              src={pokemon.sprites.other["official-artwork"].front_default}
+              alt={pokemon.name}
+              objectFit="contain"
+              className="transition-transform duration-300 hover:scale-110 animate-float z-10 object-contain"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
+              No image
+            </div>
+          )}
+        </section>
+        {/* Tabs section */}
+        <section className="w-8/12 h-full">
+          <div className="text-center mt-4">
+            <PokemonTabs pokemon={pokemon} />
+          </div>
         </section>
       </div>
     </Card>
