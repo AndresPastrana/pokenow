@@ -1,19 +1,27 @@
 "use client";
 
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
+import { useSyncLocalStorage } from "../hooks/useLocalStorage";
 
 type FavoritesContextType = {
   favorites: string[];
   addFavorite: (pokemonName: string) => void;
   removeFavorite: (pokemonName: string) => void;
   isFavorite: (pokemonName: string) => boolean;
+  clearFavorites: () => void;
 };
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(
   undefined
 );
 
-export const useFavorites = () => {
+/**
+ * Custom hook to access the favorites context.
+ *
+ * @returns The FavoritesContextType with methods and state.
+ * @throws Error if used outside of the FavoritesProvider.
+ */
+export const useFavorites = (): FavoritesContextType => {
   const context = useContext(FavoritesContext);
   if (!context) {
     throw new Error("useFavorites must be used within a FavoritesProvider");
@@ -21,35 +29,41 @@ export const useFavorites = () => {
   return context;
 };
 
-export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({
+/**
+ * A provider component to manage the favorites context.
+ *
+ * @param children - React children elements.
+ */
+export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [favorites, setFavorites] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem("pokemonFavorites");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
-  }, []);
+  const {
+    value: favorites,
+    setValue: setFavorites,
+    clearValue: clearFavorites,
+  } = useSyncLocalStorage<string[]>("pokemonFavorites", []);
 
   const addFavorite = (pokemonName: string) => {
-    const updatedFavorites = [...favorites, pokemonName];
-    setFavorites(updatedFavorites);
-    localStorage.setItem("pokemonFavorites", JSON.stringify(updatedFavorites));
+    if (!favorites.includes(pokemonName)) {
+      setFavorites([...favorites, pokemonName]);
+    }
   };
 
   const removeFavorite = (pokemonName: string) => {
-    const updatedFavorites = favorites.filter((name) => name !== pokemonName);
-    setFavorites(updatedFavorites);
-    localStorage.setItem("pokemonFavorites", JSON.stringify(updatedFavorites));
+    setFavorites(favorites.filter((name) => name !== pokemonName));
   };
 
   const isFavorite = (pokemonName: string) => favorites.includes(pokemonName);
 
   return (
     <FavoritesContext.Provider
-      value={{ favorites, addFavorite, removeFavorite, isFavorite }}
+      value={{
+        favorites,
+        addFavorite,
+        removeFavorite,
+        isFavorite,
+        clearFavorites,
+      }}
     >
       {children}
     </FavoritesContext.Provider>

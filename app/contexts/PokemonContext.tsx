@@ -10,7 +10,6 @@ import { env_data } from "@/lib/env";
 import { PokemonDetails } from "../types";
 import { PokemonService } from "../services/pokemon.service";
 
-// Define the shape of the context
 interface PokemonContextType {
   pokemon: PokemonDetails[];
   setPokemon: React.Dispatch<React.SetStateAction<PokemonDetails[]>>;
@@ -18,8 +17,7 @@ interface PokemonContextType {
   error: string | null;
   loading: boolean;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
-  selectedType: string;
-  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
+
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
@@ -33,13 +31,13 @@ interface PokemonProviderProps {
 }
 
 // TODO: Integrate this with the useFetch function
+// Remove the pagination here out to a custom hook
 export const PokemonProvider: React.FC<PokemonProviderProps> = ({
   children,
 }) => {
   const [pokemon, setPokemon] = useState<PokemonDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
-  const [selectedType, setSelectedType] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -78,13 +76,13 @@ export const PokemonProvider: React.FC<PokemonProviderProps> = ({
         pokemon,
 
         setPokemon,
-
         fetchPokemon,
+
         error,
-        loading, // Provide the loading state to the context
+        loading,
+
         setError,
-        selectedType,
-        setSelectedType,
+
         currentPage,
         setCurrentPage,
         totalPages,
