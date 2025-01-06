@@ -7,8 +7,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_POKE_API_URL=${NEXT_PUBLIC_POKE_API_URL}
-      - NEXT_PUBLIC_POKEMONS_BY_PAGE=${NEXT_PUBLIC_POKEMONS_BY_PAGE}
+     - NEXT_PUBLIC_POKE_API_URL=${NEXT_PUBLIC_POKE_API_URL:-https://pokeapi.co/api/v2/}
+
     volumes:
       - ./data:/app/data
   

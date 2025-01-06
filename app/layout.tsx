@@ -24,6 +24,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </head>
       <body
         className={`${oxanium.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen `}
       >
