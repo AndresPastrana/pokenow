@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${oxanium.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen p-1 sm:p-3 md:p-8`}
+        className={`${oxanium.className} bg-gradient-to-br from-red-100 to-blue-100 min-h-screen `}
       >
         <FavoritesProvider>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
